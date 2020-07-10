@@ -1,6 +1,3 @@
-# Get winrates split up by front of World of Tanks campaign
-# Written by: Failware
-# Last update: 20200710
 # Tested with Python 3.6.9
 
 import argparse
