@@ -96,14 +96,14 @@ def getClanData(battles: list, frontOfProvince: dict, frontIds: set):
 
   return clanData
 
-def formatColumn(clan: dict, frontIds: set):
+def formatRow(clan: dict, frontIds: set):
   numBattles = reduce(lambda acc, curr: acc + clan[curr]['victory'] + clan[curr]['defeat'] + clan[curr]['draw'], frontIds, 0)
   numVictories = reduce(lambda acc, curr: acc + clan[curr]['victory'], frontIds, 0)
   winRate = "-" if numBattles == 0 else '{:.3f}'.format(numVictories / numBattles)
   return [clan['name'], numBattles, winRate]
 
 def printClanData(clanData: dict, frontIds: set):
-  output = map(lambda clanId: formatColumn(clanData[clanId], frontIds), clanData.keys())
+  output = map(lambda clanId: formatRow(clanData[clanId], frontIds), clanData.keys())
   output = filter(lambda x: x[1] > 0, output)
   output = sorted(output, key = lambda x: x[1], reverse = True)
   table = tabulate(output, headers=['Clan', 'Battles', 'Winrate'])
@@ -121,7 +121,7 @@ args = parser.parse_args()
 APPLICATION_ID = args.applicationId
 
 frontIds = set(args.frontIds) if len(args.frontIds) > 0 else getAllFrontIds()
-frontOfProvince = getFrontsOfProvinces(frontIds)
+frontsOfProvinces = getFrontsOfProvinces(frontIds)
 battles = getBattleLogs(args.clanId)
-clanData = getClanData(battles, frontOfProvince, frontIds)
+clanData = getClanData(battles, frontsOfProvinces, frontIds)
 printClanData(clanData, frontIds)
